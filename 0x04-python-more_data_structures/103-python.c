@@ -1,73 +1,81 @@
-#include <stdio.h>
+#define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
-/**
-* print_python_bytes - USED TO PRINT BYTES INFORMATION.
-*
-* @p: IS A PYTHON OBJECT.
-* Return: NOTHING.
-*/
 
-void print_python_bytes(PyObject *p)
-{
-	char *str;
-	long int SIZE, j, lim;
-
-	printf("[.] bytes object info\n");
-
-	if (!PyBytes_Check(p))
-	{
-		printf("  [ERROR] Invalid Bytes Object\n");
-		return;
-	}
-
-	SIZE = ((PyVarObject *)(p))->ob_size;
-	str = ((PyBytesObject *)p)->ob_sval;
-
-	printf("  size: %ld\n", SIZE);
-	printf("  trying string: %s\n", str);
-
-	if (SIZE >= 10)
-		lim = 10;
-	else
-		lim = SIZE + 1;
-
-	printf("  first %ld bytes:", lim);
-
-	for (j = 0; j < lim; j++)
-		if (str[j] >= 0)
-			printf(" %02x", str[j]);
-		else
-			printf(" %02x", 256 + str[j]);
-
-	printf("\n");
-}
+void print_python_bytes(PyObject *p);
 
 /**
-* print_python_list - USED TO PRINT LIST INFORMATION.
-*
-* @p: REPRESENTS A PYTHON OBJECT
-* Return: NOTHING.
+* print_python_list - USED TO PRINT INFO ABOUT PYTHON LISTS.
+* @p: REPRESENTS PYOBJECT STRUCT.
 */
 
 void print_python_list(PyObject *p)
 {
-	long int SIZE, j;
-	PyListObject *LIST;
-	PyObject *OBJ;
+	PyListObject *OBJ;
+	PyVarObject *var_OBJ;
+	PyObject *ITEM;
+	Py_ssize_t j, SIZE, ALLOC;
+	const char *TYPE;
 
-	SIZE = ((PyVarObject *)(p))->ob_size;
-	LIST = (PyListObject *)p;
+	OBJ = (PyListObject *)p;
+	var_OBJ = (PyVarObject *)p;
+
+	SIZE = var_OBJ->ob_size;
+	ALLOC = OBJ->allocated;
 
 	printf("[*] Python list info\n");
 
-	printf("[*] Size of the Python List = %ld\n", SIZE);
-	printf("[*] Allocated = %ld\n", LIST->allocated);
+	printf("[*] Size of the Python List = %zd\n", SIZE);
+	printf("[*] Allocated = %zd\n", ALLOC);
 
-	for (j = 0; j < SIZE; j++)
+	j = 0;
+	while (j < SIZE)
 	{
-		OBJ = ((PyListObject *)p)->ob_item[j];
-		printf("Element %ld: %s\n", j, ((OBJ)->ob_type)->tp_name);
-		if (PyBytes_Check(OBJ))
-			print_python_bytes(OBJ);
+		ITEM = OBJ->ob_item[j];
+		TYPE = ITEM->ob_type->tp_name;
+		printf("Element %zd: %s\n", j++, TYPE);
+
+		if (strcmp(TYPE, "bytes") == 0)
+			print_python_bytes(ITEM);
 	}
+}
+
+/**
+* print_python_bytes - USED TO PRINT INFO ABOUT PYTHON BYTES
+* @p: POINTER TO PYOBJECT STRUCT
+*/
+
+void print_python_bytes(PyObject *p)
+{
+	Py_ssize_t j, SIZE, Nbytes;
+	PyBytesObject *OBJ;
+	PyVarObject *var_OBJ;
+	char *string;
+
+	printf("[.] bytes object info\n");
+
+	if (strcmp(p->ob_type->tp_name, "bytes"))
+		printf("  [ERROR] Invalid Bytes Object\n");
+	else
+	{
+		OBJ = (PyBytesObject *)p;
+		var_OBJ = (PyVarObject *)p;
+		SIZE = var_OBJ->ob_size;
+		string = OBJ->ob_sval;
+		Nbytes = SIZE >= 10 ? 10 : SIZE + 1;
+
+		printf("  size: %zd\n", SIZE);
+		printf("  trying string: %s\n", string);
+		printf("  first %zd bytes: ", Nbytes);
+
+		j = 0;
+		while (j < Nbytes)
+		{
+			printf("%02hhx", string[j++]);
+			if (j < Nbytes)
+				printf(" ");
+			else
+				printf("\n");
+		}
+	}
+}
