@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-
 """THIS PYTHON IS USED TO DEFINE
 A class Rectangle THAT INHERITS
 FROM BaseGeometry."""
