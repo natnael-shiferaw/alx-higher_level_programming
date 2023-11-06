@@ -40,7 +40,7 @@ NOW WE CAN TEST IT:
     [1, 2, 3]
 
     >>> my_list = MyList("hello")
-    
+
     >>> my_list
     ['h', 'e', 'l', 'l', 'o']
 
