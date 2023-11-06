@@ -13,6 +13,6 @@ class MyList(list):
         """A FUNCTION THAT IS USED TO PRINT
         THE list, IN ASCENDING ORDER."""
 
-        NEW_LIST = self[:]
-        NEW_LIST.sort()
-        print("{}".format(NEW_LIST))
+        newlist = self[:]
+        newlist.sort()
+        print("{}".format(newlist))
