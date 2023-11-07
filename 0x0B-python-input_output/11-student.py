@@ -9,7 +9,7 @@ class Student:
     represent a student."""
 
     def __init__(self, first_name, last_name, age):
-        """A function that is used to 
+        """A function that is used to
         initialize a NEW Student.
 
         Args:
