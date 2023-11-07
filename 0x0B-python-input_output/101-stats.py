@@ -30,15 +30,15 @@ if __name__ == "__main__":
     import sys
 
     Count = 0
-    Size = 0
+    size = 0
     ValidCodes = ['200', '301', '400', '401', '403', '404', '405', '500']
-    StatusCodes = {}
+    status_codes = {}
 
     try:
         for Line in sys.stdin:
 
             if Count == 10:
-                print_stats(Size, StatusCodes)
+                print_stats(size, status_codes)
                 Count = 1
             else:
                 Count += 1
@@ -46,22 +46,22 @@ if __name__ == "__main__":
             Line = Line.split()
 
             try:
-                Size += int(Line[-1])
+                size += int(Line[-1])
             except (IndexError, ValueError):
                 pass
 
             try:
 
                 if Line[-2] in ValidCodes:
-                    if StatusCodes.get(Line[-2], -1) == -1:
-                        StatusCodes[Line[-2]] = 1
+                    if status_codes.get(Line[-2], -1) == -1:
+                        status_codes[Line[-2]] = 1
                     else:
-                        StatusCodes[Line[-2]] += 1
+                        status_codes[Line[-2]] += 1
             except IndexError:
                 pass
 
-        print_stats(Size, StatusCodes)
+        print_stats(size, status_codes)
 
     except KeyboardInterrupt:
-        print_stats(Size, StatusCodes)
+        print_stats(size, status_codes)
         raise
