@@ -1,14 +1,14 @@
 #!/usr/bin/python3
 
 """This Python script is designed to read
-data from the standard input and calculate metrics. 
+data from the standard input and calculate metrics.
 
 It will print the following statistics after
 processing every ten lines or when a keyboard
 interruption (CTRL + C) is encountered:
 
-- The total file size accumulated up to that point.
-- The count of read status codes up to that point.
+    - The total file size accumulated up to that point.
+    - The count of read status codes up to that point.
 """
 
 
