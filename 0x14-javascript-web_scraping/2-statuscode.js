@@ -9,4 +9,4 @@ request.get(process.argv[2])
   .on('response', function (response) {
     // Log the HTTP status code of the response.
     console.log(`code: ${response.statusCode}`);
-});
+  });
